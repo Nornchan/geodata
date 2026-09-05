@@ -1,0 +1,66 @@
+# applications.yaml — tunnel clients that must not be routed back through the proxy.
+# behavior: classical   routes to: DIRECT
+#
+# This is the ONE rule-set that legitimately needs a high-priority DIRECT: a
+# tunnel client's own connection to its server cannot itself be tunnelled, or it
+# loops. Everything here is that, and nothing else.
+#
+# REMOVED relative to the common upstream list: BitTorrent and download-manager
+# processes (qBittorrent, Transmission, aria2, Thunder, uTorrent, WebTorrent,
+# BitComet, Folx, NeatDM, NetTransport, fdm, xdm, DownloadService).
+#
+# Upstream routes those DIRECT to keep torrent traffic off a metered proxy. That
+# is a bandwidth decision with a security consequence: a public torrent swarm
+# publishes every participant's address, and this rule-set sits second in the
+# chain, so it wins over every geosite and geoip rule beneath it. Under a
+# no-real-IP-exposure standard that trade is not available. Route torrent
+# traffic through the proxy, or reject it — do not send it out on the user's
+# own address.
+#
+# Also removed: zerotier-one and Tailscale. Their peer traffic is carried on
+# 100.64.0.0/10 and fc00::/7, which lancidr.yaml already routes DIRECT by
+# address. Matching them by process name adds nothing and grants a blanket
+# DIRECT to whatever else those processes contact.
+payload:
+  - PROCESS-NAME,clash
+  - PROCESS-NAME,clash.exe
+  - PROCESS-NAME,clash-meta
+  - PROCESS-NAME,clash-meta.exe
+  - PROCESS-NAME,mihomo
+  - PROCESS-NAME,mihomo.exe
+  - PROCESS-NAME,sing-box
+  - PROCESS-NAME,sing-box.exe
+  - PROCESS-NAME,xray
+  - PROCESS-NAME,xray.exe
+  - PROCESS-NAME,v2ray
+  - PROCESS-NAME,v2ray.exe
+  - PROCESS-NAME,hysteria
+  - PROCESS-NAME,hysteria.exe
+  - PROCESS-NAME,hysteria2
+  - PROCESS-NAME,hysteria2.exe
+  - PROCESS-NAME,tuic
+  - PROCESS-NAME,tuic.exe
+  - PROCESS-NAME,tuic-client
+  - PROCESS-NAME,tuic-client.exe
+  - PROCESS-NAME,naive
+  - PROCESS-NAME,naive.exe
+  - PROCESS-NAME,trojan
+  - PROCESS-NAME,trojan.exe
+  - PROCESS-NAME,trojan-go
+  - PROCESS-NAME,trojan-go.exe
+  - PROCESS-NAME,shadowsocks
+  - PROCESS-NAME,shadowsocks.exe
+  - PROCESS-NAME,ss-local
+  - PROCESS-NAME,ss-local.exe
+  - PROCESS-NAME,sslocal
+  - PROCESS-NAME,sslocal.exe
+  - PROCESS-NAME,leaf
+  - PROCESS-NAME,leaf.exe
+  - PROCESS-NAME,frpc
+  - PROCESS-NAME,frpc.exe
+  - PROCESS-NAME,frps
+  - PROCESS-NAME,frps.exe
+  - PROCESS-NAME,udp2raw
+  - PROCESS-NAME,udp2raw.exe
+  - PROCESS-NAME,udp2raw_mp
+  - PROCESS-NAME,udp2raw_mp.exe
